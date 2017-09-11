@@ -29,21 +29,49 @@
              :value @second-value
              :on-change #(reset! second-value (-> % .-target .-value))}]]])
 
+(defn calculate-rf-degen [life es fire-res]
+  (*
+   (+
+    (* 0.9 (int life))
+    (* 0.7 (int es)))
+   (-
+    1
+    (/
+     (int fire-res)
+     100))))
+
+(defn percent-max-life [life es fire-res]
+  (if (= life 0)
+    100
+    (* 100 (/ (calculate-rf-degen life es fire-res) life))))
+
+(defn percent-max-es [life es fire-res]
+  (if (= es 0)
+    100
+    (* 100 (/ (calculate-rf-degen life es fire-res) es))))
+
 ;; -------------------------
 ;; Views
 
 (defn home-page []
-  (let [life (r/atom 0)
-        es (r/atom 0)]
+  (let [life (r/atom 1000)
+        es (r/atom 0)
+        fire-res (r/atom 0)]
     (fn []
       [:div.container
        [:div.row
         [:div {:class "mt-5 col-md-12 mb-5"}
-         [:h1 "RF Calculator life " @life]]]
+         [:h1 "RF Calculator"]]]
        [:form
         [two-col-input "Life" life "ES" es]
-        [one-col-input "Life" life]
-        [one-col-input "ES" es]]])))
+        [one-col-input "Fire resist" fire-res]]
+       [:p "You take "
+        (calculate-rf-degen @life @es @fire-res)
+        " damage over 1 second, which is "
+        (percent-max-life @life @es @fire-res)
+        "% of your maximum life and "
+        (percent-max-es @life @es @fire-res)
+        "% of your maximum ES."]])))
 
 ;; -------------------------
 ;; Initialize app
