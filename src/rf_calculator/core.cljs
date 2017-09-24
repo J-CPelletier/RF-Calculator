@@ -2,6 +2,24 @@
     (:require
       [reagent.core :as r]))
 
+(def app-state (r/atom {:effective-health {:life 1000
+                                           :energy-shield 0}
+                        :offensive {:inc-ele 0
+                                    :more-ele 0
+                                    :inc-fire 0
+                                    :more-fire 0
+                                    :inc-damage 0
+                                    :more-damage 0}
+                        :defensive {:fire-res 75
+                                    :life-regen 0
+                                    :life-regen-percent 0
+                                    :inc-damage 0
+                                    :more-damage 0}}))
+
+(defn cursor
+  ([type] (r/cursor app-state [type]))
+  ([type key] (r/cursor app-state [type key])))
+
 (defn one-col-input [title value]
   [:div {:class "form-group row"}
    [:label {:class "col-sm-2 col-form-label" :for title} title]
@@ -29,49 +47,56 @@
              :value @second-value
              :on-change #(reset! second-value (-> % .-target .-value))}]]])
 
-(defn calculate-rf-degen [life es fire-res]
+(defn calculate-rf-degen [effective-health defensive]
+  (let [base-damage (+ (* 0.9 (int (:life @effective-health)))
+                       (* 0.7 (int (:energy-shield @effective-health))))
+        fire-res-dmg-reduction (- 1 (/ (int (:fire-res @defensive))
+                                          100))]
   (*
-   (+
-    (* 0.9 (int life))
-    (* 0.7 (int es)))
-   (-
-    1
-    (/
-     (int fire-res)
-     100))))
+   base-damage
+   fire-res-dmg-reduction)))
 
-(defn percent-max-life [life es fire-res]
-  (if (= life 0)
-    100
-    (* 100 (/ (calculate-rf-degen life es fire-res) life))))
+(defn rf-degen-str [effective-health defensive]
+  (str "| You take "
+       (.round js/Math (calculate-rf-degen effective-health defensive))
+       " damage per second | "))
 
-(defn percent-max-es [life es fire-res]
-  (if (= es 0)
-    100
-    (* 100 (/ (calculate-rf-degen life es fire-res) es))))
+(defn percent-max-life-str [effective-health defensive]
+  (let [life-per-second (/ (calculate-rf-degen effective-health defensive)
+                           (:life @effective-health))]
+  (if (< life-per-second 2)
+    (str (.round js/Math (* life-per-second 100)) "% of your maximum life | ")
+    "")))
+
+(defn percent-max-es-str [effective-health defensive]
+  (let [es-per-second (/ (calculate-rf-degen effective-health defensive)
+                         (:energy-shield @effective-health))]
+  (if (< es-per-second 2)
+    (str (.round js/Math (* es-per-second 100)) "% of your maximum ES |")
+    "")))
 
 ;; -------------------------
 ;; Views
 
 (defn home-page []
-  (let [life (r/atom 1000)
-        es (r/atom 0)
-        fire-res (r/atom 0)]
-    (fn []
-      [:div.container
-       [:div.row
-        [:div {:class "mt-5 col-md-12 mb-5"}
-         [:h1 "RF Calculator"]]]
-       [:form
-        [two-col-input "Life" life "ES" es]
-        [one-col-input "Fire resist" fire-res]]
-       [:p "You take "
-        (calculate-rf-degen @life @es @fire-res)
-        " damage over 1 second, which is "
-        (percent-max-life @life @es @fire-res)
-        "% of your maximum life and "
-        (percent-max-es @life @es @fire-res)
-        "% of your maximum ES."]])))
+  (fn []
+    [:div.container
+     [:div.row
+      [:div {:class "mt-5 col-md-12 mb-5"}
+       [:h1 "RF Calculator"]]]
+     [:form
+      [two-col-input
+       "Life" (cursor :effective-health :life)
+       "ES" (cursor :effective-health :energy-shield)]
+      [one-col-input
+       "Fire resist" (cursor :defensive :fire-res)]]
+     [:p
+      (rf-degen-str (cursor :effective-health)
+                    (cursor :defensive))
+      (percent-max-life-str (cursor :effective-health)
+                            (cursor :defensive))
+      (percent-max-es-str (cursor :effective-health)
+                          (cursor :defensive))]]))
 
 ;; -------------------------
 ;; Initialize app
