@@ -99,7 +99,7 @@
       [:div {:class "mt-5 col-md-12 mb-5"}
        [:h1 "RF Calculator"]]]
      [:form
-      [:h2 "Effective Life"]
+      [:h2 "Effective Health"]
       [two-col-input
        "Life" (cursor :effective-health :life)
        "ES" (cursor :effective-health :energy-shield)]
@@ -111,7 +111,7 @@
        "More damage" (cursor :defensive :more-damage)]
       [two-col-input
        "Life regen" (cursor :defensive :life-regen)
-       "Life regen %" (cursor :defensive :life-regen-percent)]]
+       "Life regen (%)" (cursor :defensive :life-regen-percent)]]
      [:p
       (rf-degen-str (cursor :effective-health)
                     (cursor :defensive))
