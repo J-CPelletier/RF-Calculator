@@ -51,10 +51,24 @@
   (let [base-damage (+ (* 0.9 (int (:life @effective-health)))
                        (* 0.7 (int (:energy-shield @effective-health))))
         fire-res-dmg-reduction (- 1 (/ (int (:fire-res @defensive))
-                                          100))]
-  (*
-   base-damage
-   fire-res-dmg-reduction)))
+                                       100))
+        life-regen-reduction (int (:life-regen @defensive))
+        life-regen-percent-reduction (* (int (:life @effective-health))
+                                        (/ (int (:life-regen-percent @defensive))
+                                           100))
+        inc-damage-increase (+ 1 (/ (int (:inc-damage @defensive))
+                                    100))
+        more-damage-increase (+ 1 (/ (int (:more-damage @defensive))
+                                     100))]
+    (-
+     (*
+      base-damage
+      fire-res-dmg-reduction
+      inc-damage-increase
+      more-damage-increase)
+     (+
+      life-regen-reduction
+      life-regen-percent-reduction))))
 
 (defn rf-degen-str [effective-health defensive]
   (str "| You take "
@@ -85,11 +99,19 @@
       [:div {:class "mt-5 col-md-12 mb-5"}
        [:h1 "RF Calculator"]]]
      [:form
+      [:h2 "Effective Life"]
       [two-col-input
        "Life" (cursor :effective-health :life)
        "ES" (cursor :effective-health :energy-shield)]
+      [:h2 "Defensive Stats"]
       [one-col-input
-       "Fire resist" (cursor :defensive :fire-res)]]
+       "Fire resist" (cursor :defensive :fire-res)]
+      [two-col-input
+       "Inc damage" (cursor :defensive :inc-damage)
+       "More damage" (cursor :defensive :more-damage)]
+      [two-col-input
+       "Life regen" (cursor :defensive :life-regen)
+       "Life regen %" (cursor :defensive :life-regen-percent)]]
      [:p
       (rf-degen-str (cursor :effective-health)
                     (cursor :defensive))

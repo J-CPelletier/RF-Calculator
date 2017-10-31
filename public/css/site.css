@@ -7,6 +7,7 @@ body {
   font-size: 1.125em;
   color: #333;
   line-height: 1.5em;
+  background: #ff6666 !important /* nice red */
 }
 
 h1, h2, h3 {
