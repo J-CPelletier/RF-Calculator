@@ -54,7 +54,7 @@
                                        100))
         life-regen-reduction (int (:life-regen @defensive))
         life-regen-percent-reduction (* (int (:life @effective-health))
-                                        (/ (int (:life-regen-percent @defensive))
+                                        (/ (float (:life-regen-percent @defensive))
                                            100))
         inc-damage-increase (+ 1 (/ (int (:inc-damage @defensive))
                                     100))
