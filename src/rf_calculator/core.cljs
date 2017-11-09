@@ -1,6 +1,6 @@
 (ns rf-calculator.core
-    (:require
-      [reagent.core :as r]))
+  (:require
+   [reagent.core :as r]))
 
 (def app-state (r/atom {:effective-health {:life 1000
                                            :energy-shield 0}
@@ -78,16 +78,16 @@
 (defn percent-max-life-str [effective-health defensive]
   (let [life-per-second (/ (calculate-rf-degen effective-health defensive)
                            (:life @effective-health))]
-  (if (< life-per-second 2)
-    (str (.round js/Math (* life-per-second 100)) "% of your maximum life | ")
-    "")))
+    (if (< life-per-second 2)
+      (str (.round js/Math (* life-per-second 100)) "% of your maximum life | ")
+      "")))
 
 (defn percent-max-es-str [effective-health defensive]
   (let [es-per-second (/ (calculate-rf-degen effective-health defensive)
                          (:energy-shield @effective-health))]
-  (if (< es-per-second 2)
-    (str (.round js/Math (* es-per-second 100)) "% of your maximum ES |")
-    "")))
+    (if (< es-per-second 2)
+      (str (.round js/Math (* es-per-second 100)) "% of your maximum ES |")
+      "")))
 
 ;; -------------------------
 ;; Views
