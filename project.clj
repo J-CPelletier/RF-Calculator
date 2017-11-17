@@ -6,10 +6,12 @@
 
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.908"]
-                 [reagent "0.7.0"]]
+                 [reagent "0.7.0"]
+                 [lein-doo "0.1.8"]]
 
   :plugins [[lein-cljsbuild "1.1.5"]
-            [lein-figwheel "0.5.13"]]
+            [lein-figwheel "0.5.13"]
+            [lein-doo "0.1.8"]]
 
   :min-lein-version "2.5.0"
 
@@ -45,7 +47,12 @@
                          :output-dir "public/js/release"
                          :asset-path   "js/out"
                          :optimizations :advanced
-                         :pretty-print false}}}}
+                         :pretty-print false}}
+                       :test
+                       {:source-paths ["src/cljs" "test/cljs"]
+                        :compiler {:output-to "resources/public/js/compiled/test.js"
+                                   :main test-example.runner
+                                   :optimizations :none}}}}
 
   :aliases {"package" ["do" "clean" ["cljsbuild" "once" "release"]]}
 
