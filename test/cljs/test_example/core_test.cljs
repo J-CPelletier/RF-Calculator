@@ -3,9 +3,11 @@
             [rf-calculator.core :as rf]
             [reagent.core :as r]))
 
-(defmacro expected-degen [app-state]
-  (rf/calculate-rf-degen (r/cursor app-state [:effective-health])
-                         (r/cursor app-state [:defensive])))
+(defonce stats-mock
+  (r/atom {:effective-health {:life 2500
+                              :energy-shield 1000}
+           :defensive {:inc-damage 50
+                       :more-damage 10}}))
 
 (deftest calculate-rf-degen
   (testing "Base damage calculations"
@@ -44,10 +46,24 @@
              (rf/calculate-rf-degen (r/cursor stats [:effective-health])
                                     (r/cursor stats [:defensive]))))))
   (testing "Damage calculations with increased and more damage"
-    (let [stats (r/atom {:effective-health {:life 2500
-                                            :energy-shield 1000}
-                         :defensive {:inc-damage 50
-                                     :more-damage 10}})]
-      (is (= 4867.5
-             (rf/calculate-rf-degen (r/cursor stats [:effective-health])
-                                    (r/cursor stats [:defensive])))))))
+    (is (= 4867.5
+           (rf/calculate-rf-degen (r/cursor stats-mock [:effective-health])
+                                  (r/cursor stats-mock [:defensive]))))))
+
+(deftest rf-degen-str
+  (testing "Calculating using stats from mock"
+    (is (= "| You take 4868 damage per second | "
+           (rf/rf-degen-str (r/cursor stats-mock [:effective-health])
+                            (r/cursor stats-mock [:defensive])))))
+  (testing "Gaining life"
+    (let [stats (r/atom {:effective-health {:life 4000}
+                         :defensive {:fire-res 110}})]
+      (is (= "| You gain 360 life per second | "
+             (rf/rf-degen-str (r/cursor stats [:effective-health])
+                              (r/cursor stats [:defensive])))))))
+
+(deftest percent-max-life-str
+  (testing "Calculating using stats from mock"
+    (is (= "195% of your maximum life | "
+           (rf/percent-max-life-str (r/cursor stats-mock [:effective-health])
+                               (r/cursor stats-mock [:defensive]))))))

@@ -71,9 +71,14 @@
       life-regen-percent-reduction))))
 
 (defn rf-degen-str [effective-health defensive]
-  (str "| You take "
-       (.round js/Math (calculate-rf-degen effective-health defensive))
-       " damage per second | "))
+  (let [damage (.round js/Math (calculate-rf-degen effective-health defensive))]
+    (if (>= damage 0)
+      (str "| You take "
+           damage
+           " damage per second | ")
+      (str "| You gain "
+           (- damage)
+           " life per second | "))))
 
 (defn percent-max-life-str [effective-health defensive]
   (let [life-per-second (/ (calculate-rf-degen effective-health defensive)
