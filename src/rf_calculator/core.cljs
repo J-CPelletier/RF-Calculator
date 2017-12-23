@@ -70,6 +70,17 @@
       life-regen-reduction
       life-regen-percent-reduction))))
 
+(defn calculate-rf-damage [effective-health offensive]
+  (let [base-damage (+ (* 0.4 (int (:life @effective-health)))
+                       (* 0.4 (int (:energy-shield @effective-health))))
+        damage-multiplier (->> @offensive
+                               vals
+                               (map (fn [x] (+ 1 (/ (int x) 100))))
+                               (reduce *))]
+    (*
+     base-damage
+     damage-multiplier)))
+
 (defn rf-degen-str [effective-health defensive]
   (let [damage (.round js/Math (calculate-rf-degen effective-health defensive))]
     (if (>= damage 0)
@@ -79,6 +90,11 @@
       (str "| You gain "
            (- damage)
            " life per second | "))))
+
+(defn rf-damage-str [effective-health offensive]
+  (str "| You deal "
+       (calculate-rf-damage effective-health offensive)
+       " damage per second |"))
 
 (defn percent-max-life-str [effective-health defensive]
   (let [life-per-second (/ (calculate-rf-degen effective-health defensive)
@@ -112,18 +128,31 @@
       [one-col-input
        "Fire resist" (cursor :defensive :fire-res)]
       [two-col-input
-       "Inc damage" (cursor :defensive :inc-damage)
+       "Inc. damage" (cursor :defensive :inc-damage)
        "More damage" (cursor :defensive :more-damage)]
       [two-col-input
        "Life regen" (cursor :defensive :life-regen)
-       "Life regen (%)" (cursor :defensive :life-regen-percent)]]
+       "Life regen (%)" (cursor :defensive :life-regen-percent)]
+      [:h2 "Offensive Stats"]
+      [two-col-input
+       "Inc. elemental damage" (cursor :offensive :inc-ele)
+       "More elemental damage" (cursor :offensive :more-ele)]
+      [two-col-input
+       "Inc. fire damage" (cursor :offensive :inc-fire)
+       "More fire damage" (cursor :offensive :more-fire)]
+      [two-col-input
+       "Inc. damage" (cursor :offensive :inc-damage)
+       "More damage" (cursor :offensive :more-damage)]]
      [:p
       (rf-degen-str (cursor :effective-health)
                     (cursor :defensive))
       (percent-max-life-str (cursor :effective-health)
                             (cursor :defensive))
       (percent-max-es-str (cursor :effective-health)
-                          (cursor :defensive))]]))
+                          (cursor :defensive))]
+     [:p
+      (rf-damage-str (cursor :effective-health)
+                     (cursor :offensive))]]))
 
 ;; -------------------------
 ;; Initialize app
