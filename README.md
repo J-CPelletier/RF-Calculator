@@ -1,19 +1,15 @@
+# RF Calculator
 
-### Development mode
+## Description
 
-To start the Figwheel compiler, navigate to the project folder and run the following command in the terminal:
+RF Calculator is a damage calculator for the [Righteous Fire](https://pathofexile.gamepedia.com/Righteous_Fire) skill gem in [Path of Exile](https://www.pathofexile.com/). You can use it in your browser [here]().
 
-```
-lein figwheel
-```
+## Installation
 
-Figwheel will automatically push cljs changes to the browser.
-Once Figwheel starts up, you should be able to open the `public/index.html` page in the browser.
+1. Get [Clojure](https://clojure.org/community/downloads)
+2. Clone this repository and open a terminal in its directory
+3. Run `lein figwheel` to develop with hot loading in the browser
 
+## Running the tests
 
-### Building for production
-
-```
-lein clean
-lein package
-```
+To run the tests, you have to run the `lein doo phantom test once` command in the webcomix folder.

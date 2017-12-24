@@ -1,6 +1,6 @@
 language: clojure
 script:
-- lein phantom doo test once
+- lein doo phantom test once
 after_success:
 - lein clean
 - lein cljsbuild once release
