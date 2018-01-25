@@ -4,7 +4,7 @@
 
 ## Description
 
-RF Calculator is a damage calculator for the [Righteous Fire](https://pathofexile.gamepedia.com/Righteous_Fire) skill gem in [Path of Exile](https://www.pathofexile.com/). You can use it in your browser [here]().
+RF Calculator is a damage calculator for the [Righteous Fire](https://pathofexile.gamepedia.com/Righteous_Fire) skill gem in [Path of Exile](https://www.pathofexile.com/). You can use it in your browser [here](https://j-cpelletier.github.io/RF-Calculator/index.html).
 
 ## Installation
 
