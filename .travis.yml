@@ -5,11 +5,11 @@ after_success:
 - lein clean
 - lein cljsbuild once release
 deploy:
-  - provider: pages
-    skip_cleanup: true
-    local_dir: public
-    github-token:
-      secure: ucJXZbo9yUhloZrqP0uHWFs4Cw1wQOS0Lh97GuhTV1XXjNxFo/E3/TRNu+x+tdHntHlxBdrG97ONvlYle6NtNnDLMyZHD50eLEWEG99WLhR92Dy6ONEm8U2nV+YPYLD3U64LqMScuoXFBmwh6r/03ORjqddntlxRoJ9zf95PzkHxxNYdMf5BOVsR/d3IZVIIJG2lJzbFl2BXAuIiOPwc6UstEt1/A6I0Z6X3J3JHBwLdwW8sDPxTWK91+auzn+D4ApOpU6hLG1DVKqqTgbeFsBVBSvtRzLwFDpR0LteuUADsx1AHVGJjfI2chtd9aB6GGFOUI3syG4zsHtlTtddGmSVzWCGD4DU7pCBq+0cAU1OTJ9OS337W0tQtmipqSPrn0FSQXQAK1k2QnNwPK+xKH5ax8ssSNFl70ccCEsVcv7oWQEgAOsAx0yzsNbR6rGL2mDKGRluJLQ4OIogoVNDgJ351YTDxu3mhwIT5LumOQEIA0ROFu9zUSmKMnqMx1tywAMp2Es4rn5BKNGZB9+qmGAyB7mYBjJabbzv0zLSei+j9aFsakJopB9wAdyd0Q6GyP5wH1jX/URkqeLELCwnghbSJdanG0lfiUtbMblXP2vYnkVNS8cuE6fh/X3tjcKsEHqY7zFs6LX5rKh3VeUZydX2fmwwjJQh2JAPSsL9p9AM=
-    on:
-      tags: true
-      branch: gh-pages
+- provider: pages
+  skip_cleanup: true
+  local_dir: public
+  github-token:
+    secure: lJEsYpVl5rp9zFiOKVUPgsJboVKS33u5g5TLgYz6ZHPiapoB1ARr+u/WXT/5nVuN2dqlKQPZjIjnFzb3BVBfb9G0tH1SqV91QD16eFy/Xv8WuyukCT26zAbR58MzL2ZBlqxnuiFs3+cBjBXeEKJLv0W43EH+24CuZeZK7hsb4Sz6zUw/043Ea+nXILu7OGInye/2hcOXJFc3dpUAF+WaXvt8SF2RosMoq0sHDmxAO3Nlm3hbDuj5ddWShjBlxTPZ4q1rpqtozj8FuoeNwd/ftchgOj3tnwzIIDpRgJ2RQtzLY3GcxJhdOt9Bwex3fDQOZaqLd7dOXU3sY0ZjxWI6lhXRL1sfzFULY0aA8ryhHVipUI5x1R+drft0GgKJim//gEQ5/yPaq+NtN4wuZ666hRhkq3xY8abzlS37u6S43qsKTlcBmYIPYnxDWCJQVzog1ivwLK06xjyhiL206GrEl8kDMFoFD6uRebmm/vfCvuPdaCBV3dzLRdVd5gvJ99nBHnffwwVqVJWNxOafQdzcrigF+ADVPpVOEaDe8phrtFDFH10Ud5Y3FD7nBc7Gu+Ac/BuRjnroAbohAp7Dir5NB/W0OZTeqV2Y6ftKUexxa7K8t9US9pDiLKyEy9Mikrftj2ORUmEcVs8gWyOn9WaV6PPbZBFIzFmr75rcMBFAqJY=
+  on:
+    tags: true
+    branch: gh-pages
