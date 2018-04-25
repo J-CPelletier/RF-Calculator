@@ -99,9 +99,10 @@
            " life per second | "))))
 
 (defn rf-damage-str [effective-health offensive]
-  (str "| You deal "
-       (calculate-rf-damage effective-health offensive)
-       " damage per second |"))
+  (let [damage (.round js/Math (calculate-rf-damage effective-health offensive))]
+    (str "| You deal "
+         damage
+         " damage per second |")))
 
 (defn percent-max-life-str [effective-health defensive]
   (let [life-per-second (/ (calculate-rf-degen effective-health defensive)
