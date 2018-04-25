@@ -74,12 +74,19 @@
   (let [base-damage (+ (* 0.4 (int (:life @effective-health)))
                        (* 0.4 (int (:energy-shield @effective-health))))
         damage-multiplier (->> @offensive
-                               vals
-                               (map (fn [x] (+ 1 (/ (int x) 100))))
-                               (reduce *))]
+                               (map (fn [[k v]] [k  (/ (int v) 100)]))
+                               (into {}))]
     (*
      base-damage
-     damage-multiplier)))
+     (+
+      1
+      (damage-multiplier :inc-ele)
+      (damage-multiplier :inc-fire)
+      (damage-multiplier :inc-damage))
+     (*
+      (+ 1 (damage-multiplier :more-ele))
+      (+ 1 (damage-multiplier :more-fire))
+      (+ 1 (damage-multiplier :more-damage))))))
 
 (defn rf-degen-str [effective-health defensive]
   (let [damage (.round js/Math (calculate-rf-degen effective-health defensive))]

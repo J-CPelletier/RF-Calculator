@@ -15,6 +15,19 @@
            :offensive {:inc-damage 100
                        :more-damage 100}}))
 
+(defonce stats-mock-offensive-inc
+  (r/atom {:effective-health {:life 2500
+                              :energy-shield 1000}
+          :offensive {:inc-damage 50
+                      :more-damage 100
+                      :inc-fire 50}}))
+
+(defonce stats-mock-offensive-more
+  (r/atom {:effective-health {:life 2500
+                              :energy-shield 1000}
+           :offensive {:more-damage 100
+                       :more-fire 100}}))
+
 (deftest calculate-rf-degen
   (testing "Base damage calculations"
     (let [stats (r/atom {:effective-health {:life 2500
@@ -84,7 +97,15 @@
   (testing "Calculating using stats from mock"
     (is (= 5600
            (rf/calculate-rf-damage (r/cursor stats-mock-offensive [:effective-health])
-                                   (r/cursor stats-mock-offensive [:offensive]))))))
+                                   (r/cursor stats-mock-offensive [:offensive])))))
+  (testing "'Increased' multiplier stack additively"
+    (is (= 5600
+           (rf/calculate-rf-damage (r/cursor stats-mock-offensive-inc [:effective-health])
+                                   (r/cursor stats-mock-offensive-inc [:offensive])))))
+  (testing "'More' multiplier stack multiplicatively"
+    (is (= 5600
+           (rf/calculate-rf-damage (r/cursor stats-mock-offensive-more [:effective-health])
+                                   (r/cursor stats-mock-offensive-more [:offensive]))))))
 
 (deftest rf-damage-str
   (testing "Calculating using stats from mock"
