@@ -14,4 +14,4 @@ RF Calculator is a damage calculator for the [Righteous Fire](https://pathofexil
 
 ## Running the tests
 
-To run the tests, you have to run the `lein doo phantom test once` command in the webcomix folder.
+To run the tests, you have to run the `lein doo phantom test once` command in the project directory.
